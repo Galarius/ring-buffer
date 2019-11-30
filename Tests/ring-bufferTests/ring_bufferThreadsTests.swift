@@ -4,18 +4,16 @@ import XCTest
 final class ring_bufferThreadsTests: XCTestCase {
     
     private let dispatchGroup = DispatchGroup()
-    private var rbuf = RingBuffer<Float>(capacity: 512)
+    private var rbuf = RingBuffer<Int>(capacity: 128)
     
     func runProducer() {
         let queueProducer = DispatchQueue(label: "QueueProducer")
         dispatchGroup.enter()
         queueProducer.async() {
-            for _ in 0..<5 {
-                for i in 0..<256 {
-                    let val = Float(i) * 0.1
-                    self.rbuf.write(val)
-                    self.rbuf.submit()
-                    print("WRITE value: \(NSString(format:"%.2f", val)), count: (\(self.rbuf.count)), available: \(self.rbuf.available)")
+            for _ in 0..<3 {
+                for i in 0..<64 {
+                    self.rbuf.push(i)
+                    print("WRITE value: \(i), count: (\(self.rbuf.count)), available: \(self.rbuf.available)")
                 }
             }
             self.dispatchGroup.leave()
@@ -26,11 +24,10 @@ final class ring_bufferThreadsTests: XCTestCase {
         let queueConsumer = DispatchQueue(label: "QueueConsumer")
         dispatchGroup.enter()
         queueConsumer.async() {
-            for _ in 0..<5 {
-                for _ in 0..<256 {
-                    let val = self.rbuf.read()
-                    self.rbuf.discard()
-                    print("READ  value: \(NSString(format:"%.2f", val)), count: (\(self.rbuf.count)), available: \(self.rbuf.available)")
+            for _ in 0..<3 {
+                for _ in 0..<64 {
+                    let val = self.rbuf.pop()
+                    print("READ  value: \(String(describing: val)), count: (\(self.rbuf.count)), available: \(self.rbuf.available)")
                 }
             }
             self.dispatchGroup.leave()

@@ -3,66 +3,183 @@ import XCTest
 
 final class ring_bufferTests: XCTestCase {
     
-    private let epsilon: Float = 0.000001
-    
     func testCountPropertyChange() {
         
-        var rbuf = RingBuffer<Float>(capacity: 3)
+        var rbuf = RingBuffer<Int>(capacity: 2)
         
-        // write one
-        rbuf.write( sin(Float.pi / 2.0) )
-        XCTAssertEqual(rbuf.count, 0, "Count must not increment until submit() is called")
+        XCTAssert(rbuf.isEmpty)
         
-        // submit one
-        rbuf.submit()
-        XCTAssertEqual(rbuf.count, 1, "Count must increment after submit() is called")
+        rbuf.push(1)
+        XCTAssertEqual(rbuf.count, 1, "Count must increment after push() is called")
         
-        // write one
-        rbuf.write( sin(Float.pi / 4.0) )
-        XCTAssertEqual(rbuf.count, 1, "Count must not increment until submit() is called")
+        rbuf.push(2)
+        XCTAssertEqual(rbuf.count, 2, "Count must increment after push() is called")
         
-        // submit one
-        rbuf.submit()
-        XCTAssertEqual(rbuf.count, 2, "Count must increment after submit() is called")
+        XCTAssert(rbuf.isFull)
         
-        // read one
-        let pi2 = rbuf.read()
-        XCTAssertEqual(rbuf.count, 2, "Count must not decrement until discard() is called")
+        let item1 = rbuf.pop()
+        XCTAssertEqual(rbuf.count, 1, "Count must decrement after pop() is called")
+        XCTAssert(item1 == 1, "Value must qual to the first item that was written")
         
-        // discard one
-        rbuf.discard()
-        XCTAssertEqual(rbuf.count, 1, "Count must decrement after discard() is called")
+        let item2 = rbuf.pop()
+        XCTAssertEqual(rbuf.count, 0, "Count must decrement after pop() is called")
+        XCTAssert(item2 == 2, "Value must qual to the first item that was written")
         
-        XCTAssert(abs(pi2 - sin(Float.pi / 2.0)) < epsilon, "Value must qual to the first that was written")
+        XCTAssert(rbuf.isEmpty)
         
-        // read one
-        let pi4 = rbuf.read()
-        XCTAssertEqual(rbuf.count, 1, "Count must not decrement until discard() is called")
+        XCTAssertEqual(rbuf.capacity, 2, "Capacity must not change")
+    }
+    
+    func testCheckHead() {
         
-        // discard one
-        rbuf.discard()
-        XCTAssertEqual(rbuf.count, 0, "Count must decrement after discard() is called")
-        XCTAssert(abs(pi4 - sin(Float.pi / 4.0)) < epsilon, "Value must qual to the second that was written")
+        var rbuf = RingBuffer<Int>(capacity: 3)
+        rbuf.push(1)
+        XCTAssertEqual(rbuf.head, 1)
+        rbuf.push(2)
+        XCTAssertEqual(rbuf.head, 2)
+        rbuf.push(3)
+        XCTAssertEqual(rbuf.head, 0)
+        rbuf.push(4)
+        XCTAssertEqual(rbuf.head, 1)
+    }
+    
+    func testCheckTailWhenNoOverflow() {
         
-        XCTAssertEqual(rbuf.capacity, 3, "Capacity must not change")
+        var rbuf = RingBuffer<Int>(capacity: 3)
+        rbuf.push(1)
+        rbuf.push(2)
+        rbuf.push(3)
+        
+        XCTAssertEqual(rbuf.tail, 0)
+        XCTAssertEqual(rbuf.pop(), 1)
+        XCTAssertEqual(rbuf.tail, 1)
+        XCTAssertEqual(rbuf.pop(), 2)
+        XCTAssertEqual(rbuf.tail, 2)
+        XCTAssertEqual(rbuf.pop(), 3)
+        XCTAssertEqual(rbuf.tail, 0)
+        XCTAssertEqual(rbuf.pop(), nil)
+        XCTAssertEqual(rbuf.tail, 0)
+    }
+    
+    func testCheckTailWhenOverflow() {
+        
+        var rbuf = RingBuffer<Int>(capacity: 3)
+        rbuf.push(1)
+        rbuf.push(2)
+        rbuf.push(3)
+        rbuf.push(4)
+        
+        XCTAssertEqual(rbuf.count, 1)
+        
+        XCTAssertEqual(rbuf.tail, 0)
+        XCTAssertEqual(rbuf.pop(), 4)
+        XCTAssertEqual(rbuf.tail, 1)
+        XCTAssertEqual(rbuf.pop(), nil)
     }
     
     func testOverrideBufferWhenInputExeedsCapacity() {
-        var rbuf = RingBuffer<Float>(capacity: 3)
-        rbuf.write(0.1); rbuf.submit()
-        rbuf.write(0.2); rbuf.submit()
-        rbuf.write(0.3); rbuf.submit()
-        XCTAssertEqual(rbuf.count, rbuf.capacity, "Capacity must equal to count")
+        var rbuf = RingBuffer<Int>(capacity: 3)
+        rbuf.push(1)
+        rbuf.push(2)
+        rbuf.push(3)
+        XCTAssert(rbuf.isFull)
         
-        rbuf.write(0.4); rbuf.submit()
-        XCTAssertEqual(rbuf.count, 1, "Count must equal 1")
+        rbuf.push(4)
+        XCTAssertEqual(rbuf.count, 1, "Count must equal to 1 after overflow")
+        XCTAssertEqual(rbuf.capacity, 3, "Capacity must not change")
+        XCTAssert(!rbuf.isFull)
+        XCTAssert(!rbuf.isEmpty)
         
-        let element = rbuf.read()
-        XCTAssert(abs(element - 0.4) < epsilon, "Should override buffer on overflow")
+        let item = rbuf.pop()
+        XCTAssert(item == 4, "Should override buffer on overflow")
+        XCTAssertEqual(rbuf.count, 0)
+        XCTAssert(rbuf.isEmpty)
+    }
+    
+    func testMustReturnNilOnPopEmpty() {
+        var rbuf = RingBuffer<Int>(capacity: 1)
+        rbuf.push(1)
+        XCTAssertEqual(rbuf.count, 1)
+        rbuf.pop()
+        XCTAssert(rbuf.isEmpty)
+        let item = rbuf.pop()
+        XCTAssertEqual(item, nil)
+    }
+    
+    func testMustDropItemIsFull() {
+        var rbuf = RingBuffer<Int>(capacity: 2)
+        XCTAssertEqual(rbuf.push(1, drop: true), 0)
+        XCTAssertEqual(rbuf.push(2, drop: true), 0)
+        XCTAssert(rbuf.isFull)
+        XCTAssertEqual(rbuf.push(3, drop: true), 1, "Must drop 1 item")
+        XCTAssertEqual(rbuf.push(4, drop: true), 1, "Must drop 1 item")
+        rbuf.pop()
+        XCTAssertEqual(rbuf.available, 1)
+        XCTAssertEqual(rbuf.push(5, drop: true), 0, "Must drop 0 item")
+        XCTAssert(rbuf.isFull)
+        XCTAssertEqual(rbuf.push(6, drop: true), 1, "Must drop 1 item")
+    }
+    
+    func testPushMultipleItems() {
+        let items = [1,2,3,4,5]
+        var rbuf = RingBuffer<Int>(capacity: 5)
+        rbuf.push(items)
+        XCTAssertEqual(rbuf.count, 5, "Buffer is submited")
+    }
+    
+    func testPushMultipleItemsOverflow() {
+        let items = [1,2,3,4,5,6]
+        var rbuf = RingBuffer<Int>(capacity: 5)
+        rbuf.push(items)
+        XCTAssertEqual(rbuf.count, 1, "Buffer is overflow")
+        XCTAssertEqual(rbuf.pop(), 6)
+    }
+    
+    func testPushMultipleItemsOverflowDrop() {
+        let items = [1,2,3,4,5,6]
+        var rbuf = RingBuffer<Int>(capacity: 4)
+        XCTAssertEqual(rbuf.push(items, drop: true), 2, "Two items must be dropped")
+        XCTAssert(rbuf.isFull)
+    }
+    
+    func testPushMultipleItemsOverflowDropFalse() {
+        let items = [1,2,3,4,5,6]
+        var rbuf = RingBuffer<Int>(capacity: 4)
+        XCTAssertEqual(rbuf.push(items, drop: false), 0, "No items must be dropped")
+        XCTAssert(rbuf.count == 2)
+    }
+    
+    func testPopMultipleItems() {
+        let items = [1,2,3,4,5,6]
+        var rbuf = RingBuffer<Int>(capacity: 6)
+        rbuf.push(items)
+        XCTAssertEqual(rbuf.pop(amount: 4), [1,2,3,4])
+        XCTAssertEqual(rbuf.pop(amount: 2), [5,6])
+        XCTAssert(rbuf.isEmpty)
+    }
+    
+    func testPopMultipleItemsWithOverflow() {
+        let items = [1,2,3,4,5,6]
+        var rbuf = RingBuffer<Int>(capacity: 6)
+        rbuf.push(items)
+        XCTAssertEqual(rbuf.pop(amount: 7), nil)
+        XCTAssertEqual(rbuf.pop(amount: rbuf.count), items)
+        XCTAssert(rbuf.isEmpty)
     }
     
     static var allTests = [
         ("testCountPropertyChange", testCountPropertyChange),
-        ("testOverrideBufferWhenInputExeedsCapacity", testOverrideBufferWhenInputExeedsCapacity)
+        ("testCheckHead", testCheckHead),
+        ("testCheckTailWhenNoOverflow", testCheckTailWhenNoOverflow),
+        ("testCheckTailWhenOverflow", testCheckTailWhenOverflow),
+        ("testOverrideBufferWhenInputExeedsCapacity", testOverrideBufferWhenInputExeedsCapacity),
+        ("testMustReturnNilOnPopEmpty", testMustReturnNilOnPopEmpty),
+        ("testMustDropItemIsFull", testMustDropItemIsFull),
+        ("testPushMultipleItems", testPushMultipleItems),
+        ("testPushMultipleItemsOverflow", testPushMultipleItemsOverflow),
+        ("testPushMultipleItemsOverflowDrop", testPushMultipleItemsOverflowDrop),
+        ("testPushMultipleItemsOverflowDropFalse", testPushMultipleItemsOverflowDropFalse),
+        ("testPopMultipleItems", testPopMultipleItems),
+        ("testPopMultipleItemsWithOverflow", testPopMultipleItemsWithOverflow),
     ]
 }
