@@ -1,7 +1,11 @@
 import XCTest
 
-import ringBufferTests
+import RingBufferSingleItemTests
+import RingBufferMultipleItemsTests
+import RingBufferThreadsTests
 
 var tests = [XCTestCaseEntry]()
-tests += ringBufferTests.allTests()
+tests += RingBufferSingleItemTests.allTests()
+tests += RingBufferMultipleItemsTests.allTests()
+tests += RingBufferThreadsTests.allTests()
 XCTMain(tests)

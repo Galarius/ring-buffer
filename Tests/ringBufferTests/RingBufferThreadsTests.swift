@@ -11,10 +11,12 @@ final class RingBufferThreadsTests: XCTestCase {
         dispatchGroup.enter()
         queueProducer.async {
             for _ in 0..<3 {
-                for idx in 0..<64 {
-                    self.rbuf.push(idx)
-                    print("WRITE value: \(idx), count: (\(self.rbuf.count)), available: \(self.rbuf.available)")
+                var data = [Int](repeating: 0, count: 64)
+                for idx in 0..<(data.count) {
+                    data[idx] = idx * 2
                 }
+                self.rbuf.push(data)
+                print("PUSH data: \(data)")
             }
             self.dispatchGroup.leave()
         }
@@ -23,15 +25,9 @@ final class RingBufferThreadsTests: XCTestCase {
     func runConsumer() {
         let queueConsumer = DispatchQueue(label: "QueueConsumer")
         dispatchGroup.enter()
-        queueConsumer.async {
-            for _ in 0..<3 {
-                for _ in 0..<64 {
-                    let val = self.rbuf.pop()
-                    print("READ  value: \(String(describing: val)),
-                                 count: (\(self.rbuf.count)),
-                                available: \(self.rbuf.available)")
-                }
-            }
+        queueConsumer.asyncAfter(wallDeadline: .now() + 0.05) {
+            let data = self.rbuf.pop(amount: 64)
+            print("POP data: \(String(describing: data))")
             self.dispatchGroup.leave()
         }
     }

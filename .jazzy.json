@@ -1,0 +1,15 @@
+/**
+ * Jazzy
+ * Github: https://github.com/realm/jazzy
+ * Run: `jazzy --config .jazzy.json --min-acl internal`
+ */
+ {
+    "author": "Galarius",
+    "author_url": "https://galarius.ru",
+    "github_url": "https://github.com/Galarius/ring-buffer",
+    "output": "doc",
+    "clean": "true",
+    "include": [
+        "Sources/*"
+    ]
+}
