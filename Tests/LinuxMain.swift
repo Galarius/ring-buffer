@@ -1,7 +1,7 @@
 import XCTest
 
-import ring_bufferTests
+import ringBufferTests
 
 var tests = [XCTestCaseEntry]()
-tests += ring_bufferTests.allTests()
+tests += ringBufferTests.allTests()
 XCTMain(tests)

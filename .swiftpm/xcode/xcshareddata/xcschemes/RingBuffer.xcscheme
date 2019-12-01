@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ring-buffer"
-               BuildableName = "ring-buffer"
-               BlueprintName = "ring-buffer"
+               BlueprintIdentifier = "RingBuffer"
+               BuildableName = "RingBuffer"
+               BlueprintName = "RingBuffer"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,9 +28,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ring-bufferTests"
-               BuildableName = "ring-bufferTests"
-               BlueprintName = "ring-bufferTests"
+               BlueprintIdentifier = "ringBufferTests"
+               BuildableName = "ringBufferTests"
+               BlueprintName = "ringBufferTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,9 +46,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ring-bufferTests"
-               BuildableName = "ring-bufferTests"
-               BlueprintName = "ring-bufferTests"
+               BlueprintIdentifier = "ringBufferTests"
+               BuildableName = "ringBufferTests"
+               BlueprintName = "ringBufferTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
@@ -74,9 +74,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "ring-buffer"
-            BuildableName = "ring-buffer"
-            BlueprintName = "ring-buffer"
+            BlueprintIdentifier = "RingBuffer"
+            BuildableName = "RingBuffer"
+            BlueprintName = "RingBuffer"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>
