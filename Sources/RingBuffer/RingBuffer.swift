@@ -83,7 +83,7 @@ public struct RingBuffer<Element: Numeric> {
      - parameters:
         - capacity: Maximum number of elements in the buffer
     */
-    init(capacity: Int) {
+    public init(capacity: Int) {
         precondition(capacity > 0)
         self.capacity = capacity
         items = [Element](repeating: 0, count: self.capacity)
@@ -92,7 +92,7 @@ public struct RingBuffer<Element: Numeric> {
     // MARK: - Push
 
     /// Push single element (override on overflow by default)
-    mutating func push(_ value: Element) {
+    public mutating func push(_ value: Element) {
         items[head] = value
         head = (head + 1) % capacity
         atomicCountAdd(1)
@@ -106,14 +106,14 @@ public struct RingBuffer<Element: Numeric> {
         
         - returns: 1 if value was skipped, otherwise 0
      */
-    @discardableResult mutating func push(_ value: Element, drop: Bool) -> Int {
+    @discardableResult public mutating func push(_ value: Element, drop: Bool) -> Int {
         guard !isFull || !drop else { return 1 }
         push(value)
         return 0
     }
 
     /// Push multiple  elements (override on overflow by default)
-    mutating func push(_ values: [Element]) {
+    public mutating func push(_ values: [Element]) {
         for idx in 0..<(values.count) {
             items[(head + idx) % capacity] = values[idx]
         }
@@ -130,7 +130,7 @@ public struct RingBuffer<Element: Numeric> {
         
         - returns: Number of skipped elements
      */
-    @discardableResult mutating func push(_ values: [Element], drop: Bool) -> Int {
+    @discardableResult public mutating func push(_ values: [Element], drop: Bool) -> Int {
         guard !(isFull && drop) else { return values.count }
 
         var dropped = 0
@@ -158,7 +158,7 @@ public struct RingBuffer<Element: Numeric> {
         - returns:
             Element or `nil` if buffer is empty
      */
-    @discardableResult mutating func pop() -> Element? {
+    @discardableResult public mutating func pop() -> Element? {
         guard !isEmpty else { return nil}
 
         let item = items[tail]
@@ -176,7 +176,7 @@ public struct RingBuffer<Element: Numeric> {
         -  returns:
             Array of elements or `nil` if requested amount is greater than current buffer size
      */
-    @discardableResult mutating func pop(amount: Int) -> [Element]? {
+    @discardableResult public mutating func pop(amount: Int) -> [Element]? {
         guard !isEmpty && amount <= count else { return nil}
 
         var values = [Element]()
@@ -191,7 +191,7 @@ public struct RingBuffer<Element: Numeric> {
 
     // MARK: -
 
-    mutating private func atomicCountAdd(_ value: Int) {
+    private mutating func atomicCountAdd(_ value: Int) {
         lock.wait()
         defer { lock.signal() }
         if _count + value > capacity {
