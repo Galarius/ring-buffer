@@ -44,7 +44,7 @@ import Dispatch
  
  ```
  */
-struct RingBuffer<Element: Numeric> {
+public struct RingBuffer<Element: Numeric> {
 
     private var items: [Element]
     private var _count = 0
