@@ -4,9 +4,9 @@ import Dispatch
  ## Ring (Circular) buffer in Swift
  
  - Thread-safe for single producer and single consumer
- - Write operations may override occupied space or skip items
+ - Write operations may overwrite oldest elements or skip elements that overflow the buffer
  
- ### Example (override occupied space):
+ ### Example (overwrite occupied space):
  ```swift
  
  var rbuf = RingBuffer<Int>(capacity: 20)
@@ -16,7 +16,7 @@ import Dispatch
  
  rbuf.push(dataSet1)
  rbuf.push(dataSet2)
- // override first 10 elements with 3d data set
+ // overwrite first 10 elements with 3d data set
  rbuf.push(dataSet3)
  
  var data = rbuf.pop(amount: 10)
@@ -24,7 +24,7 @@ import Dispatch
  
  ```
  
- ### Example (skip items):
+ ### Example (skip elements):
  ```swift
  
  var rbuf = RingBuffer<Int>(capacity: 20)
@@ -64,7 +64,7 @@ public struct RingBuffer<Element: Numeric> {
         defer { lock.signal() }
         return _count
     }
-    /// Available amount of elements that could be written to the buffer
+    /// Slots in the buffer available for being filled
     var available: Int {
         return capacity - count
     }
@@ -91,20 +91,20 @@ public struct RingBuffer<Element: Numeric> {
 
     // MARK: - Push
 
-    /// Push single element (override on overflow by default)
+    /// Push single element (overwrite on overflow by default)
     public mutating func push(_ value: Element) {
         items[head] = value
         head = (head + 1) % capacity
         atomicCountAdd(1)
     }
     /**
-        Push single element with specifying write behavior
+        Push single element with specific overwrite behavior
             
         - parameters:
             - value: Value to write
-            - drop: Skip element if buffer is full
+            - drop: Skip (don’t add) element if buffer is full
         
-        - returns: 1 if value was skipped, otherwise 0
+        - returns: 1 if value wasn’t added, otherwise 0
      */
     @discardableResult public mutating func push(_ value: Element, drop: Bool) -> Int {
         guard !isFull || !drop else { return 1 }
@@ -112,7 +112,7 @@ public struct RingBuffer<Element: Numeric> {
         return 0
     }
 
-    /// Push multiple  elements (override on overflow by default)
+    /// Push multiple elements (overwrite on overflow by default)
     public mutating func push(_ values: [Element]) {
         for idx in 0..<(values.count) {
             items[(head + idx) % capacity] = values[idx]
@@ -122,13 +122,13 @@ public struct RingBuffer<Element: Numeric> {
     }
 
     /**
-        Push multiple  elements with specifying write behavior
+        Push multiple elements with specific overwrite behavior
             
         - parameters:
             - values: Values to write
-            - drop: Skip element if buffer is full
+            - drop: Skip (don’t add) elements if buffer is full
         
-        - returns: Number of skipped elements
+        - returns: Number of elements that were not added
      */
     @discardableResult public mutating func push(_ values: [Element], drop: Bool) -> Int {
         guard !(isFull && drop) else { return values.count }
@@ -168,7 +168,7 @@ public struct RingBuffer<Element: Numeric> {
     }
 
     /**
-        Pop multiple  elements
+        Pop multiple elements
     
         - parameters:
             - amount: Number of elements to read
