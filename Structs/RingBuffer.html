@@ -8,6 +8,9 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Struct/RingBuffer" class="dashAnchor"></a>
@@ -15,13 +18,18 @@
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
-        <p class="header-right"><a href="https://github.com/Galarius/ring-buffer"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="https://github.com/Galarius/ring-buffer"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         RingBuffer Structure Reference
       </p>
     </div>
@@ -44,6 +52,7 @@
             <h1>RingBuffer</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">RingBuffer</span><span class="o">&lt;</span><span class="kt">Element</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">Element</span> <span class="p">:</span> <span class="kt">Numeric</span></code></pre>
 
                 </div>
@@ -70,7 +79,7 @@
 <span class="c1">// data is equal to dataSet3</span>
 
 </code></pre>
-<h3 id='example-skip-items' class='heading'>Example (skip elements):</h3>
+<h3 id='example-skip-elements' class='heading'>Example (skip elements):</h3>
 <pre class="highlight swift"><code>
 <span class="k">var</span> <span class="nv">rbuf</span> <span class="o">=</span> <span class="kt">RingBuffer</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">capacity</span><span class="p">:</span> <span class="mi">20</span><span class="p">)</span>
 <span class="k">let</span> <span class="nv">dataSet1</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Int</span><span class="p">](</span><span class="nv">repeating</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">count</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span>
@@ -93,11 +102,13 @@
           <section class="section task-group-section">
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Public%20Properties"></a>
-                <a name="//apple_ref/swift/Section/Public Properties" class="dashAnchor"></a>
-                <a href="#/Public%20Properties">
-                  <h3 class="section-name">Public Properties</h3>
-                </a>
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Properties"></a>
+                  <h3 class="section-name"><span>Properties</span>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -120,7 +131,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">capacity</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">capacity</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -147,7 +158,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">head</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">head</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -174,7 +185,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">tail</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">tail</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -221,7 +232,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Available amount of elements that could be written to the buffer</p>
+                        <p>Slots in the buffer available for being filled</p>
 
                       </div>
                       <div class="declaration">
@@ -295,9 +306,11 @@
               <div class="task-name-container">
                 <a name="/Init"></a>
                 <a name="//apple_ref/swift/Section/Init" class="dashAnchor"></a>
-                <a href="#/Init">
-                  <h3 class="section-name">Init</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Init"></a>
+                  <h3 class="section-name"><span>Init</span>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -305,7 +318,7 @@
                     <code>
                     <a name="/s:10RingBufferAAV8capacityAByxGSi_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(capacity:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10RingBufferAAV8capacityAByxGSi_tcfc">init(capacity:)</a>
+                    <a class="token" href="#/s:10RingBufferAAV8capacityAByxGSi_tcfc">init(capacity:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -319,7 +332,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="nf">init</span><span class="p">(</span><span class="nv">capacity</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">capacity</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -351,9 +364,11 @@
               <div class="task-name-container">
                 <a name="/Push"></a>
                 <a name="//apple_ref/swift/Section/Push" class="dashAnchor"></a>
-                <a href="#/Push">
-                  <h3 class="section-name">Push</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Push"></a>
+                  <h3 class="section-name"><span>Push</span>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -361,7 +376,7 @@
                     <code>
                     <a name="/s:10RingBufferAAV4pushyyxF"></a>
                     <a name="//apple_ref/swift/Method/push(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10RingBufferAAV4pushyyxF">push(_:)</a>
+                    <a class="token" href="#/s:10RingBufferAAV4pushyyxF">push(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -376,7 +391,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">mutating</span> <span class="kd">func</span> <span class="nf">push</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">Element</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">push</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">Element</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -388,7 +403,7 @@
                     <code>
                     <a name="/s:10RingBufferAAV4push_4dropSix_SbtF"></a>
                     <a name="//apple_ref/swift/Method/push(_:drop:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10RingBufferAAV4push_4dropSix_SbtF">push(_:drop:)</a>
+                    <a class="token" href="#/s:10RingBufferAAV4push_4dropSix_SbtF">push(_:<wbr>drop:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -396,7 +411,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Push single element with specifying write behavior</p>
+                        <p>Push single element with specific overwrite behavior</p>
 
                       </div>
                       <div class="declaration">
@@ -404,7 +419,7 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="k">mutating</span> <span class="kd">func</span> <span class="nf">push</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">Element</span><span class="p">,</span> <span class="nv">drop</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+<span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">push</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">Element</span><span class="p">,</span> <span class="nv">drop</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -432,7 +447,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>Skip element if buffer is full</p>
+                                  <p>Skip (don’t add) element if buffer is full</p>
                                 </div>
                               </td>
                             </tr>
@@ -441,7 +456,7 @@
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>1 if value was skipped, otherwise 0</p>
+                        <p>1 if value wasn’t added, otherwise 0</p>
                       </div>
                     </section>
                   </div>
@@ -451,7 +466,7 @@
                     <code>
                     <a name="/s:10RingBufferAAV4pushyySayxGF"></a>
                     <a name="//apple_ref/swift/Method/push(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10RingBufferAAV4pushyySayxGF">push(_:)</a>
+                    <a class="token" href="#/s:10RingBufferAAV4pushyySayxGF">push(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -459,14 +474,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Push multiple  elements (overwrite on overflow by default)</p>
+                        <p>Push multiple elements (overwrite on overflow by default)</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">mutating</span> <span class="kd">func</span> <span class="nf">push</span><span class="p">(</span><span class="n">_</span> <span class="nv">values</span><span class="p">:</span> <span class="p">[</span><span class="kt">Element</span><span class="p">])</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">push</span><span class="p">(</span><span class="n">_</span> <span class="nv">values</span><span class="p">:</span> <span class="p">[</span><span class="kt">Element</span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
@@ -478,7 +493,7 @@
                     <code>
                     <a name="/s:10RingBufferAAV4push_4dropSiSayxG_SbtF"></a>
                     <a name="//apple_ref/swift/Method/push(_:drop:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10RingBufferAAV4push_4dropSiSayxG_SbtF">push(_:drop:)</a>
+                    <a class="token" href="#/s:10RingBufferAAV4push_4dropSiSayxG_SbtF">push(_:<wbr>drop:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -486,7 +501,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Push multiple  elements with specifying write behavior</p>
+                        <p>Push multiple elements with specific overwrite behavior</p>
 
                       </div>
                       <div class="declaration">
@@ -494,7 +509,7 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="k">mutating</span> <span class="kd">func</span> <span class="nf">push</span><span class="p">(</span><span class="n">_</span> <span class="nv">values</span><span class="p">:</span> <span class="p">[</span><span class="kt">Element</span><span class="p">],</span> <span class="nv">drop</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+<span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">push</span><span class="p">(</span><span class="n">_</span> <span class="nv">values</span><span class="p">:</span> <span class="p">[</span><span class="kt">Element</span><span class="p">],</span> <span class="nv">drop</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -522,7 +537,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>Skip element if buffer is full</p>
+                                  <p>Skip (don’t add) elements if buffer is full</p>
                                 </div>
                               </td>
                             </tr>
@@ -531,7 +546,7 @@
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>Number of skipped elements</p>
+                        <p>Number of elements that were not added</p>
                       </div>
                     </section>
                   </div>
@@ -542,9 +557,11 @@
               <div class="task-name-container">
                 <a name="/Pop"></a>
                 <a name="//apple_ref/swift/Section/Pop" class="dashAnchor"></a>
-                <a href="#/Pop">
-                  <h3 class="section-name">Pop</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Pop"></a>
+                  <h3 class="section-name"><span>Pop</span>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -568,7 +585,7 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="k">mutating</span> <span class="kd">func</span> <span class="nf">pop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span></code></pre>
+<span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">pop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -584,7 +601,7 @@
                     <code>
                     <a name="/s:10RingBufferAAV3pop6amountSayxGSgSi_tF"></a>
                     <a name="//apple_ref/swift/Method/pop(amount:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10RingBufferAAV3pop6amountSayxGSgSi_tF">pop(amount:)</a>
+                    <a class="token" href="#/s:10RingBufferAAV3pop6amountSayxGSgSi_tF">pop(amount:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -592,7 +609,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Pop multiple  elements</p>
+                        <p>Pop multiple elements</p>
 
                       </div>
                       <div class="declaration">
@@ -600,7 +617,7 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="k">mutating</span> <span class="kd">func</span> <span class="nf">pop</span><span class="p">(</span><span class="nv">amount</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Element</span><span class="p">]?</span></code></pre>
+<span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">pop</span><span class="p">(</span><span class="nv">amount</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Element</span><span class="p">]?</span></code></pre>
 
                         </div>
                       </div>
@@ -635,11 +652,10 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://galarius.ru" target="_blank" rel="external">Galarius</a>. All rights reserved. (Last updated: 2019-12-01)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.12.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2021 <a class="link" href="https://galarius.ru" target="_blank" rel="external noopener">Galarius</a>. All rights reserved. (Last updated: 2021-10-05)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>
