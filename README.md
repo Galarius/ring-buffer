@@ -1,9 +1,9 @@
 # Ring (Circular) buffer in Swift
 
 - Thread-safe for single producer and single consumer
-- Write operations may override occupied space or skip items
+- Write operations may overwrite oldest elements or skip elements that overflow the buffer
 
-## Example (override occupied space):
+## Example (overwrite occupied space):
 ```swift
 
 var rbuf = RingBuffer<Int>(capacity: 20)
@@ -13,7 +13,7 @@ let dataSet3 = [Int](repeating: 3, count: 10)
 
 rbuf.push(dataSet1)
 rbuf.push(dataSet2)
-// override first 10 elements with 3d data set
+// overwrite first 10 elements with 3d data set
 rbuf.push(dataSet3)
 
 var data = rbuf.pop(amount: 10)
@@ -21,7 +21,7 @@ var data = rbuf.pop(amount: 10)
 
 ```
 
-## Example (skip items):
+## Example (skip elements):
 ```swift
 
 var rbuf = RingBuffer<Int>(capacity: 20)
