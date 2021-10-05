@@ -65,9 +65,9 @@
 
 <ul>
 <li>Thread-safe for single producer and single consumer</li>
-<li>Write operations may override occupied space or skip items</li>
+<li>Write operations may overwrite oldest elements or skip elements that overflow the buffer</li>
 </ul>
-<h3 id='example-override-occupied-space' class='heading'>Example (override occupied space):</h3>
+<h3 id='example-overwrite-occupied-space' class='heading'>Example (overwrite occupied space):</h3>
 <pre class="highlight swift"><code>
 <span class="k">var</span> <span class="nv">rbuf</span> <span class="o">=</span> <span class="kt">RingBuffer</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">capacity</span><span class="p">:</span> <span class="mi">20</span><span class="p">)</span>
 <span class="k">let</span> <span class="nv">dataSet1</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Int</span><span class="p">](</span><span class="nv">repeating</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">count</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span>
@@ -76,14 +76,14 @@
 
 <span class="n">rbuf</span><span class="o">.</span><span class="nf">push</span><span class="p">(</span><span class="n">dataSet1</span><span class="p">)</span>
 <span class="n">rbuf</span><span class="o">.</span><span class="nf">push</span><span class="p">(</span><span class="n">dataSet2</span><span class="p">)</span>
-<span class="c1">// override first 10 elements with 3d data set</span>
+<span class="c1">// overwrite first 10 elements with 3d data set</span>
 <span class="n">rbuf</span><span class="o">.</span><span class="nf">push</span><span class="p">(</span><span class="n">dataSet3</span><span class="p">)</span>
 
 <span class="k">var</span> <span class="nv">data</span> <span class="o">=</span> <span class="n">rbuf</span><span class="o">.</span><span class="nf">pop</span><span class="p">(</span><span class="nv">amount</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span>
 <span class="c1">// data is equal to dataSet3</span>
 
 </code></pre>
-<h3 id='example-skip-items' class='heading'>Example (skip items):</h3>
+<h3 id='example-skip-items' class='heading'>Example (skip elements):</h3>
 <pre class="highlight swift"><code>
 <span class="k">var</span> <span class="nv">rbuf</span> <span class="o">=</span> <span class="kt">RingBuffer</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">capacity</span><span class="p">:</span> <span class="mi">20</span><span class="p">)</span>
 <span class="k">let</span> <span class="nv">dataSet1</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Int</span><span class="p">](</span><span class="nv">repeating</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">count</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span>
