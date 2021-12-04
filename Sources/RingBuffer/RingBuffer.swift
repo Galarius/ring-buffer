@@ -102,7 +102,7 @@ public struct RingBuffer<Element> {
             
         - parameters:
             - value: Value to write
-            - drop: Skip (don’t add) element if buffer is full
+            - drop: Skip (do not add) element if buffer is full
         
         - returns: 1 if value wasn’t added, otherwise 0
      */
