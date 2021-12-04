@@ -44,9 +44,9 @@ import Dispatch
  
  ```
  */
-public struct RingBuffer<Element: Numeric> {
+public struct RingBuffer<Element> {
 
-    private var items: [Element]
+    private var items: [Element?]
     private var _count = 0
     private let lock = DispatchSemaphore(value: 1)
 
@@ -86,7 +86,7 @@ public struct RingBuffer<Element: Numeric> {
     public init(capacity: Int) {
         precondition(capacity > 0)
         self.capacity = capacity
-        items = [Element](repeating: 0, count: self.capacity)
+        items = [Element?](repeating: nil, count: self.capacity)
     }
 
     // MARK: - Push
@@ -181,7 +181,7 @@ public struct RingBuffer<Element: Numeric> {
 
         var values = [Element]()
         for idx in 0..<(amount) {
-            values.append(items[(tail + idx) % capacity])
+            values.append(items[(tail + idx) % capacity]!)
         }
         tail = (tail + amount) % capacity
         atomicCountAdd(-amount)
