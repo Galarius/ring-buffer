@@ -3,7 +3,7 @@
 - Thread-safe for single producer and single consumer
 - Write operations may overwrite oldest elements or skip elements that overflow the buffer
 
-## Example (overwrite occupied space):
+## Example (overwrite occupied space)
 ```swift
 
 var rbuf = RingBuffer<Int>(capacity: 20)
@@ -21,7 +21,7 @@ var data = rbuf.pop(amount: 10)
 
 ```
 
-## Example (skip elements):
+## Example (skip elements)
 ```swift
 
 var rbuf = RingBuffer<Int>(capacity: 20)
