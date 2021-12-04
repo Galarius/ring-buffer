@@ -13,10 +13,10 @@ final class RingBufferSingleItemTests: XCTestCase {
         XCTAssert(rbuf.isFull)
         let item1 = rbuf.pop()
         XCTAssertEqual(rbuf.count, 1, "Count must decrement after pop() is called")
-        XCTAssert(item1 == 1, "Value must qual to the first item that was written")
+        XCTAssert(item1 == 1, "Value must equal to the first item that was written")
         let item2 = rbuf.pop()
         XCTAssertEqual(rbuf.count, 0, "Count must decrement after pop() is called")
-        XCTAssert(item2 == 2, "Value must qual to the first item that was written")
+        XCTAssert(item2 == 2, "Value must equal to the first item that was written")
         XCTAssert(rbuf.isEmpty)
         XCTAssertEqual(rbuf.capacity, 2, "Capacity must not change")
     }
@@ -63,7 +63,7 @@ final class RingBufferSingleItemTests: XCTestCase {
         XCTAssertEqual(rbuf.pop(), nil)
     }
 
-    func testOverrideBufferWhenInputExeedsCapacity() {
+    func testOverwriteBufferWhenInputExeedsCapacity() {
         var rbuf = RingBuffer<Int>(capacity: 3)
         rbuf.push(1)
         rbuf.push(2)
@@ -75,7 +75,7 @@ final class RingBufferSingleItemTests: XCTestCase {
         XCTAssert(!rbuf.isFull)
         XCTAssert(!rbuf.isEmpty)
         let item = rbuf.pop()
-        XCTAssert(item == 4, "Should override buffer on overflow")
+        XCTAssert(item == 4, "Should overwrite buffer on overflow")
         XCTAssertEqual(rbuf.count, 0)
         XCTAssert(rbuf.isEmpty)
     }
@@ -109,7 +109,7 @@ final class RingBufferSingleItemTests: XCTestCase {
         ("testCheckHead", testCheckHead),
         ("testCheckTailWhenNoOverflow", testCheckTailWhenNoOverflow),
         ("testCheckTailWhenOverflow", testCheckTailWhenOverflow),
-        ("testOverrideBufferWhenInputExeedsCapacity", testOverrideBufferWhenInputExeedsCapacity),
+        ("testOverwriteBufferWhenInputExeedsCapacity", testOverwriteBufferWhenInputExeedsCapacity),
         ("testMustReturnNilOnPopEmpty", testMustReturnNilOnPopEmpty),
         ("testMustDropItemIsFull", testMustDropItemIsFull)
     ]
